@@ -1,0 +1,91 @@
+<div class="col-lg-3 mb-4">
+    <div class="profile-card mb-4">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="img-fluid">
+                {% else %}
+                    {{ user.first_name|first }}{{ user.last_name|first }}
+                {% endif %}
+            </div>
+            <h5 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
+            <p class="text-white-50 small mb-0">Member since {{ user.profile.date_joined|date:"M Y" }}</p>
+        </div>
+        <div class="p-3">
+            <div class="row text-center py-3">
+                <div class="col-6">
+                    <h5 class="mb-0 fw-bold text-primary">{{ user.profile.points }}</h5>
+                    <span class="text-muted small">Points</span>
+                </div>
+                <div class="col-6">
+                    <h5 class="mb-0 fw-bold text-success">{{ user.profile.current_streak }}</h5>
+                    <span class="text-muted small">Day Streak</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav flex-column nav-pills sidebar-nav mb-4" role="tablist">
+        <a class="nav-link {% if active_tab == 'dashboard' %}active{% endif %} mb-2" href="{% url 'dashboard' %}">
+            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+        </a>
+        <a class="nav-link {% if active_tab == 'activities' %}active{% endif %} mb-2" href="{% url 'activity_list' %}">
+            <i class="fas fa-running me-2"></i> Activities
+        </a>
+        <a class="nav-link {% if active_tab == 'challenges' %}active{% endif %} mb-2" href="{% url 'challenge_list' %}">
+            <i class="fas fa-trophy me-2"></i> Challenges
+        </a>
+        <a class="nav-link {% if active_tab == 'rewards' %}active{% endif %} mb-2" href="{% url 'reward_list' %}">
+            <i class="fas fa-gift me-2"></i> Rewards
+        </a>
+        <a class="nav-link {% if active_tab == 'redemption_history' %}active{% endif %} mb-2" href="{% url 'redemption_history' %}">
+            <i class="fas fa-history me-2"></i> Redemption History
+        </a>
+        <a class="nav-link {% if active_tab == 'cart' %}active{% endif %} mb-2" href="{% url 'cart_view' %}">
+            <i class="fas fa-shopping-cart me-2"></i> Shopping Cart
+            {% if cart_item_count > 0 %}
+                <span class="badge bg-primary rounded-pill ms-1">{{ cart_item_count }}</span>
+            {% endif %}
+        </a>
+        <a class="nav-link {% if active_tab == 'achievements' %}active{% endif %} mb-2" href="{% url 'achievements' %}">
+            <i class="fas fa-medal me-2"></i> Achievements
+        </a>
+        <a class="nav-link {% if active_tab == 'health_metrics' %}active{% endif %} mb-2" href="{% url 'health_metrics' %}">
+            <i class="fas fa-heartbeat me-2"></i> Health Metrics
+        </a>
+        <a class="nav-link {% if active_tab == 'leaderboard' %}active{% endif %} mb-2" href="{% url 'leaderboard' %}">
+            <i class="fas fa-users me-2"></i> Leaderboard
+        </a>
+        <a class="nav-link {% if active_tab == 'subscriptions' %}active{% endif %} mb-2" href="{% url 'subscriptions' %}">
+            <i class="fas fa-credit-card me-2"></i> Subscription
+        </a>
+    </div>
+</div>
+
+<style>
+    .sidebar-nav .nav-link {
+        color: #495057;
+        border-radius: 0.375rem;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-nav .nav-link:hover {
+        background-color: rgba(100, 30, 54, 0.08);
+        color: var(--primary-color);
+    }
+    
+    .sidebar-nav .nav-link.active {
+        background-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar-nav .nav-link i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .sidebar-nav .nav-link.active i {
+        color: white;
+    }
+</style> 

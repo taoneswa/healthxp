@@ -1,0 +1,373 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}Profile - HealthXP{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'healthxpfront/css/custom.css' %}" rel="stylesheet">
+<style>
+    .profile-container {
+        background-color: var(--light-color);
+        padding: 40px 0;
+        min-height: calc(100vh - 280px);
+    }
+    
+    .profile-card {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary-color, #641e36) 0%, #8a2a4a 100%);
+        padding: 40px 20px;
+        color: white;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        border: 5px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        color: var(--primary-color, #641e36);
+        font-size: 3.5rem;
+        font-weight: bold;
+    }
+    
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .stat-counter {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+    
+    .stat-counter h3 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .form-container {
+        padding: 30px;
+    }
+    
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+    
+    .section-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid #f1f1f1;
+    }
+    
+    .section-body {
+        padding: 25px;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+    
+    .form-control {
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .form-control:focus {
+        border-color: var(--primary-color, #641e36);
+        box-shadow: 0 0 0 0.2rem rgba(100, 30, 54, 0.25);
+    }
+    
+    .btn-primary {
+        background-color: var(--primary-color, #641e36);
+        border-color: var(--primary-color, #641e36);
+        padding: 12px 24px;
+        font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+        background-color: #7a2542;
+        border-color: #7a2542;
+    }
+    
+    .file-upload {
+        position: relative;
+    }
+    
+    .file-upload .form-control {
+        padding-left: 45px;
+    }
+    
+    .file-upload-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="row">
+            <!-- Left Column - Profile Overview -->
+            <div class="col-lg-4 mb-4">
+                <div class="profile-card mb-4">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="img-fluid">
+                            {% else %}
+                                {{ user.first_name|first }}{{ user.last_name|first }}
+                            {% endif %}
+                        </div>
+                        <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                        <p class="mb-0 text-white-50">@{{ user.username }}</p>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div class="stat-counter">
+                                    <h3 class="text-primary">{{ user.profile.points }}</h3>
+                                    <p class="text-muted mb-0">Points</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-counter">
+                                    <h3 class="text-success">0</h3>
+                                    <p class="text-muted mb-0">Rewards</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6 class="text-uppercase fw-bold mb-3">Account Info</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2 border-top">
+                                    <span class="text-muted">Email</span>
+                                    <span class="fw-medium">{{ user.email }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2 border-top">
+                                    <span class="text-muted">Member Since</span>
+                                    <span class="fw-medium">{{ user.profile.date_joined|date:"F j, Y" }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2 border-top border-bottom">
+                                    <span class="text-muted">Last Login</span>
+                                    <span class="fw-medium">{{ user.last_login|date:"F j, Y" }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Edit Profile Form -->
+            <div class="col-lg-8">
+                <form method="POST" enctype="multipart/form-data" class="form-container">
+                    {% csrf_token %}
+                    
+                    <!-- Personal Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="m-0">Personal Information</h4>
+                        </div>
+                        <div class="section-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ u_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                    {{ u_form.first_name }}
+                                    {% if u_form.first_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in u_form.first_name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ u_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                    {{ u_form.last_name }}
+                                    {% if u_form.last_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in u_form.last_name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ u_form.username.id_for_label }}" class="form-label">Username</label>
+                                    {{ u_form.username }}
+                                    {% if u_form.username.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in u_form.username.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ u_form.email.id_for_label }}" class="form-label">Email Address</label>
+                                    {{ u_form.email }}
+                                    {% if u_form.email.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in u_form.email.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Health Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4 class="m-0">Health Information</h4>
+                        </div>
+                        <div class="section-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ p_form.birth_date.id_for_label }}" class="form-label">Birth Date</label>
+                                    {{ p_form.birth_date }}
+                                    {% if p_form.birth_date.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in p_form.birth_date.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ p_form.profile_picture.id_for_label }}" class="form-label">Profile Picture</label>
+                                    <div class="file-upload">
+                                        <i class="fas fa-camera file-upload-icon"></i>
+                                        {{ p_form.profile_picture }}
+                                    </div>
+                                    {% if p_form.profile_picture.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in p_form.profile_picture.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ p_form.height.id_for_label }}" class="form-label">Height (cm)</label>
+                                    {{ p_form.height }}
+                                    {% if p_form.height.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in p_form.height.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ p_form.weight.id_for_label }}" class="form-label">Weight (kg)</label>
+                                    {{ p_form.weight }}
+                                    {% if p_form.weight.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in p_form.weight.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info mb-0 mt-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-info-circle fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Why provide your health information?</h6>
+                                        <p class="mb-0 small">Adding your height and weight helps us calculate your BMI and provide more personalized health recommendations. This information is kept private and only used to enhance your experience.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary px-5">
+                            <i class="fas fa-save me-2"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add Bootstrap classes to form inputs
+        const formControls = document.querySelectorAll('input[type=text], input[type=email], input[type=password], input[type=number], input[type=date], textarea, select');
+        formControls.forEach(input => {
+            input.classList.add('form-control');
+        });
+        
+        // Add file input styling
+        const fileInputs = document.querySelectorAll('input[type=file]');
+        fileInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+    });
+</script>
+{% endblock %} 

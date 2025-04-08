@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  <rect x="50" y="100" width="700" height="400" fill="#fff" stroke="#641e36" stroke-width="2" rx="10" ry="10"/>
+  <g fill="#641e36">
+    <circle cx="200" cy="250" r="80"/>
+    <circle cx="400" cy="250" r="80"/>
+    <circle cx="600" cy="250" r="80"/>
+  </g>
+  <g fill="#fff" text-anchor="middle">
+    <text x="200" y="260" font-family="Arial" font-size="36">E</text>
+    <text x="400" y="260" font-family="Arial" font-size="36">R</text>
+    <text x="600" y="260" font-family="Arial" font-size="36">I</text>
+  </g>
+  <text x="400" y="400" font-family="Arial" font-size="36" text-anchor="middle" fill="#641e36">IPERI-ZIM Team</text>
+  <text x="400" y="450" font-family="Arial" font-size="24" text-anchor="middle" fill="#666">Healthcare Professionals</text>
+</svg> 

@@ -1,0 +1,243 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Shopping Cart - HealthXP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        {% with active_tab='rewards' %}
+            {% include 'healthxpfront/includes/sidebar.html' %}
+        {% endwith %}
+        
+        <!-- Right Column: Main Content -->
+        <div class="col-md-9">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Shopping Cart</h2>
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'redemption_history' %}" class="btn btn-outline-danger me-3">
+                        <i class="fas fa-history me-2"></i> Redemption History
+                    </a>
+                    <div class="points-badge">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-medal me-2"></i>
+                            <span>Your Points Balance: <strong>{{ user.profile.points }}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            {% if cart_items %}
+                <div class="card mb-4">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 50%">Item</th>
+                                        <th class="text-center">Points</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart_items %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if item.reward.image %}
+                                                    <img src="{{ item.reward.image.url }}" alt="{{ item.reward.name }}" class="img-thumbnail me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="bg-light d-flex align-items-center justify-content-center me-2" style="width: 60px; height: 60px; border-radius: 4px;">
+                                                        <i class="fas fa-gift fa-2x text-muted"></i>
+                                                    </div>
+                                                {% endif %}
+                                                <div>
+                                                    <h6 class="mb-0">{{ item.reward.name }}</h6>
+                                                    <span class="badge bg-secondary">{{ item.reward.get_category_display }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{{ item.reward.points_required }}</td>
+                                        <td class="text-center">
+                                            <div class="quantity-control">
+                                                <form method="post" action="{% url 'update_cart_item' item.id %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="decrease">
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </form>
+                                                <span class="mx-2">{{ item.quantity }}</span>
+                                                <form method="post" action="{% url 'update_cart_item' item.id %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="increase">
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td class="text-center fw-bold">{{ item.quantity|mul:item.reward.points_required }}</td>
+                                        <td class="text-center">
+                                            <form method="post" action="{% url 'update_cart_item' item.id %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="remove">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-end"><strong>Total Points:</strong></td>
+                                        <td class="text-center"><strong>{{ cart.total_points }}</strong></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-3">Order Summary</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Total Items:</span>
+                                    <span>{{ cart.total_items }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Total Points:</span>
+                                    <span>{{ cart.total_points }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Your Current Points:</span>
+                                    <span>{{ user_points }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Points Remaining After Checkout:</span>
+                                    <span>{{ user_points|sub:cart.total_points }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-between">
+                                <p class="text-muted">
+                                    By clicking "Complete Checkout", your points will be deducted and your redemption request will be processed.
+                                </p>
+                                {% if can_afford_cart %}
+                                    <form method="post" action="{% url 'checkout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="fas fa-check-circle me-2"></i> Complete Checkout
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        You need {{ cart.total_points|sub:user_points }} more points to complete this checkout.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-shopping-cart fa-5x text-muted"></i>
+                        </div>
+                        <h3>Your Cart is Empty</h3>
+                        <p class="text-muted mb-4">Browse the rewards catalog and add items to your cart.</p>
+                        <a href="{% url 'reward_list' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-gift me-2"></i> Explore Rewards
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .profile-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: white;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 24px;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 12px 15px;
+    }
+    
+    .list-group-item i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .list-group-item.active i {
+        color: white;
+    }
+    
+    .points-badge {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: 500;
+    }
+    
+    .points-badge i {
+        font-size: 1.2rem;
+    }
+    
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+{% endblock %} 

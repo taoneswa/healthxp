@@ -1,0 +1,212 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}Redemption History - HealthXP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        {% with active_tab='rewards' %}
+            {% include 'healthxpfront/includes/sidebar.html' %}
+        {% endwith %}
+        
+        <!-- Right Column: Main Content -->
+        <div class="col-md-9">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Redemption History</h2>
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'cart_view' %}" class="btn btn-outline-primary me-3">
+                        <i class="fas fa-shopping-cart me-2"></i> Shopping Cart
+                    </a>
+                    <div class="points-badge">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-medal me-2"></i>
+                            <span>Your Points Balance: <strong>{{ user.profile.points }}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'redemption_history' %}" class="btn {% if not current_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            All <span class="badge bg-light text-dark ms-1">{{ total_redemptions }}</span>
+                        </a>
+                        <a href="{% url 'redemption_history' %}?status=pending" class="btn {% if current_filter == 'pending' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                            Pending <span class="badge bg-light text-dark ms-1">{{ status_counts.pending }}</span>
+                        </a>
+                        <a href="{% url 'redemption_history' %}?status=approved" class="btn {% if current_filter == 'approved' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            Approved <span class="badge bg-light text-dark ms-1">{{ status_counts.approved }}</span>
+                        </a>
+                        <a href="{% url 'redemption_history' %}?status=delivered" class="btn {% if current_filter == 'delivered' %}btn-success{% else %}btn-outline-success{% endif %}">
+                            Delivered <span class="badge bg-light text-dark ms-1">{{ status_counts.delivered }}</span>
+                        </a>
+                        <a href="{% url 'redemption_history' %}?status=rejected" class="btn {% if current_filter == 'rejected' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                            Rejected <span class="badge bg-light text-dark ms-1">{{ status_counts.rejected }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Redemption List -->
+            {% if redemptions %}
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Reward</th>
+                                        <th scope="col">Points</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for redemption in redemptions %}
+                                        <tr>
+                                            <td>{{ redemption.created_at|date:"M d, Y" }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    {% if redemption.reward.image %}
+                                                        <img src="{{ redemption.reward.image.url }}" alt="{{ redemption.reward.name }}" class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="bg-light d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px; border-radius: 4px;">
+                                                            <i class="fas fa-gift text-muted"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div>
+                                                        <div class="fw-medium">{{ redemption.reward.name }}</div>
+                                                        <div class="text-muted small">{{ redemption.reward.get_category_display }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ redemption.points_spent }}</td>
+                                            <td>
+                                                {% if redemption.status == 'pending' %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elif redemption.status == 'approved' %}
+                                                    <span class="badge bg-primary">Approved</span>
+                                                {% elif redemption.status == 'delivered' %}
+                                                    <span class="badge bg-success">Delivered</span>
+                                                {% elif redemption.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if redemption.notes %}
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="{{ redemption.notes }}">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </button>
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <div class="empty-history-icon mb-4">
+                            <i class="fas fa-history fa-5x text-muted"></i>
+                        </div>
+                        <h3>No Redemption History</h3>
+                        <p class="text-muted mb-4">You haven't redeemed any rewards yet.</p>
+                        <a href="{% url 'reward_list' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-gift me-2"></i> Browse Rewards
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .profile-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: white;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 24px;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 12px 15px;
+    }
+    
+    .list-group-item i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .list-group-item.active i {
+        color: white;
+    }
+    
+    .points-badge {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: 500;
+    }
+    
+    .points-badge i {
+        font-size: 1.2rem;
+    }
+</style>
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}
+
+{% endblock %} 

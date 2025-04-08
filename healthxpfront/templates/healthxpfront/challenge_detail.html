@@ -1,0 +1,384 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}{{ challenge.title }} - HealthXP{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        background-color: #f8f9fa;
+        min-height: calc(100vh - 70px);
+    }
+
+    .challenge-banner {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+        overflow: hidden;
+    }
+
+    .challenge-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+    }
+
+    .challenge-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1.5rem;
+        border-radius: 2rem;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    .challenge-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .challenge-icon:hover {
+        transform: translateY(-2px);
+    }
+
+    .stats-card {
+        height: 100%;
+        transition: all 0.3s ease;
+        border: none;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    .progress {
+        overflow: visible;
+    }
+
+    .progress-bar {
+        position: relative;
+        overflow: visible;
+        transition: width 0.6s ease;
+    }
+
+    .progress-bar::after {
+        content: attr(aria-valuenow) '%';
+        position: absolute;
+        right: 0;
+        top: -25px;
+        font-size: 12px;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .bg-active {
+        background-color: #28a745;
+    }
+
+    .bg-upcoming {
+        background-color: #ffc107;
+    }
+
+    .bg-completed {
+        background-color: #6c757d;
+    }
+
+    .table-active {
+        background-color: rgba(0, 123, 255, 0.05) !important;
+    }
+
+    .leaderboard-table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .leaderboard-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .user-rank {
+        font-weight: bold;
+        color: var(--primary-color);
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .challenge-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    .challenge-description {
+        font-size: 1.1rem;
+        color: #6c757d;
+        line-height: 1.6;
+    }
+
+    .join-button {
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .join-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .alert {
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-info {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .alert-secondary {
+        background-color: #e2e3e5;
+        color: #383d41;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            {% with active_tab='challenges' %}
+                {% include 'healthxpfront/includes/sidebar.html' %}
+            {% endwith %}
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Challenge Header -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="challenge-banner" style="background-image: url('{% if challenge.image %}{{ challenge.image.url }}{% else %}{% static 'healthxpfront/images/challenge-default.jpg' %}{% endif %}');">
+                        <span class="challenge-badge {% if challenge.status == 'active' %}bg-active{% elif challenge.status == 'upcoming' %}bg-upcoming{% else %}bg-completed{% endif %} text-white">
+                            <i class="fas {% if challenge.status == 'active' %}fa-play-circle{% elif challenge.status == 'upcoming' %}fa-clock{% else %}fa-flag-checkered{% endif %} me-2"></i>
+                            {{ challenge.status|title }}
+                        </span>
+                    </div>
+                    <div class="card-body p-4">
+                        <h2 class="challenge-title">{{ challenge.title }}</h2>
+                        <p class="challenge-description mb-4">{{ challenge.description }}</p>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-3">
+                                <div class="stats-card p-3 rounded-3">
+                                    <h6 class="text-muted mb-3">Activity Type</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="challenge-icon {% if challenge.activity_type %}bg-primary{% else %}bg-secondary{% endif %} me-3">
+                                            <i class="{% if challenge.activity_type %}{{ challenge.activity_type.icon_class }}{% else %}fas fa-tasks{% endif %}"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ challenge.activity_type.name|default:"Multiple Activities" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card p-3 rounded-3">
+                                    <h6 class="text-muted mb-3">Target Count</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="challenge-icon bg-warning me-3">
+                                            <i class="fas fa-bullseye"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ challenge.target_count }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card p-3 rounded-3">
+                                    <h6 class="text-muted mb-3">Points Reward</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="challenge-icon bg-success me-3">
+                                            <i class="fas fa-award"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ challenge.points_reward }} pts</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card p-3 rounded-3">
+                                    <h6 class="text-muted mb-3">Participants</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="challenge-icon bg-info me-3">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ total_participants }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if is_participating %}
+                            <!-- Progress Section -->
+                            <div class="mb-4 p-4 bg-white rounded-3 shadow-sm">
+                                <h5 class="mb-4">Your Progress</h5>
+                                <div class="progress mb-3" style="height: 24px; border-radius: 12px; background-color: #e9ecef;">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         style="width: {% widthratio participation.current_progress challenge.target_count 100 %}%;" 
+                                         aria-valuenow="{% widthratio participation.current_progress challenge.target_count 100 %}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        {{ participation.current_progress }}/{{ challenge.target_count }}
+                                    </div>
+                                </div>
+                                {% if participation.completed %}
+                                    <div class="alert alert-success d-flex align-items-center mt-4">
+                                        <i class="fas fa-check-circle fa-2x me-3"></i>
+                                        <div>
+                                            <h6 class="mb-1">Challenge Completed!</h6>
+                                            <p class="mb-0">You completed this challenge on {{ participation.completed_at|date:"M d, Y" }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% elif challenge.status == 'active' %}
+                            <!-- Join Challenge Form -->
+                            <div class="text-center p-4 bg-white rounded-3 shadow-sm">
+                                <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+                                <h4 class="mb-3">Ready to Take on This Challenge?</h4>
+                                <p class="text-muted mb-4">Join now and start tracking your progress towards the goal!</p>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button type="submit" class="btn btn-primary join-button">
+                                        <i class="fas fa-plus me-2"></i> Join Challenge
+                                    </button>
+                                </form>
+                            </div>
+                        {% elif challenge.status == 'upcoming' %}
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="fas fa-clock fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Challenge Starts Soon</h6>
+                                    <p class="mb-0">This challenge starts on {{ challenge.start_date|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-secondary d-flex align-items-center">
+                                <i class="fas fa-flag-checkered fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Challenge Ended</h6>
+                                    <p class="mb-0">This challenge ended on {{ challenge.end_date|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Leaderboard Section -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0"><i class="fas fa-trophy text-warning me-2"></i>Leaderboard</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if leaderboard %}
+                            <div class="table-responsive">
+                                <table class="table table-hover leaderboard-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th class="ps-4">Rank</th>
+                                            <th>User</th>
+                                            <th>Progress</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for participant in leaderboard %}
+                                            <tr {% if participant.user == request.user %}class="table-active"{% endif %}>
+                                                <td class="ps-4">
+                                                    <span class="user-rank">{{ forloop.counter }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{% if participant.user.profile.profile_picture %}{{ participant.user.profile.profile_picture.url }}{% else %}{% static 'healthxpfront/images/default-avatar.png' %}{% endif %}" 
+                                                             class="leaderboard-avatar" alt="{{ participant.user.username }}">
+                                                        <span class="fw-medium">{{ participant.user.username }}</span>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    <div class="progress" style="height: 8px; border-radius: 4px;">
+                                                        <div class="progress-bar bg-success" role="progressbar" 
+                                                             style="width: {% widthratio participant.current_progress challenge.target_count 100 %}%;" 
+                                                             aria-valuenow="{% widthratio participant.current_progress challenge.target_count 100 %}" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted mt-1 d-block">{{ participant.current_progress }}/{{ challenge.target_count }}</small>
+                                                </td>
+                                                <td>
+                                                    {% if participant.completed %}
+                                                        <span class="badge bg-success rounded-pill px-3">
+                                                            <i class="fas fa-check-circle me-1"></i> Completed
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="badge bg-primary rounded-pill px-3">
+                                                            <i class="fas fa-running me-1"></i> In Progress
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="fas fa-users fa-4x text-muted"></i>
+                                </div>
+                                <h4 class="text-muted">No participants yet</h4>
+                                <p class="text-muted mb-0">Be the first to join this challenge!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

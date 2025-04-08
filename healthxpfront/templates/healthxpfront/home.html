@@ -1,0 +1,231 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}Home - HealthXP{% endblock %}
+
+{% block content %}
+<div class="hero-section py-5 mb-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static 'healthxpfront/images/hero-bg.jpg' %}'); background-size: cover; background-position: center;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center text-white py-5">
+                <h1 class="display-4 fw-bold mb-4">Transform Your Health Journey with HealthXP</h1>
+                <p class="lead mb-4">Track your progress, earn rewards, and achieve your health goals with our comprehensive health platform.</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg px-5 me-3">
+                        <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                    </a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-5 me-3">
+                        <i class="fas fa-user-plus me-2"></i> Get Started
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-5">
+                        <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Features Section -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold mb-3">Why Choose HealthXP?</h2>
+        <p class="lead text-muted mb-0">Our platform offers everything you need to maintain and improve your health</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4 text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-heartbeat fa-2x"></i>
+                    </div>
+                    <h4>Health Tracking</h4>
+                    <p class="text-muted">Monitor your health metrics and visualize your progress over time with intuitive dashboards.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4 text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <h4>Rewards System</h4>
+                    <p class="text-muted">Earn points for healthy activities and redeem them for exclusive rewards and discounts.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4 text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h4>Community Support</h4>
+                    <p class="text-muted">Connect with like-minded individuals, share achievements, and motivate each other.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5 mb-5">
+    <div class="container">
+        <!-- How It Works Section -->
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">How It Works</h2>
+            <p class="lead text-muted mb-0">Getting started with HealthXP is easy</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="dashboard-card h-100">
+                    <div class="p-4 text-center">
+                        <div class="step-number rounded-circle bg-primary text-white mx-auto mb-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">1</div>
+                        <h5>Sign Up</h5>
+                        <p class="text-muted small mb-0">Create your free account to access all features</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="dashboard-card h-100">
+                    <div class="p-4 text-center">
+                        <div class="step-number rounded-circle bg-primary text-white mx-auto mb-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">2</div>
+                        <h5>Set Goals</h5>
+                        <p class="text-muted small mb-0">Define your health objectives and targets</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="dashboard-card h-100">
+                    <div class="p-4 text-center">
+                        <div class="step-number rounded-circle bg-primary text-white mx-auto mb-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">3</div>
+                        <h5>Track Progress</h5>
+                        <p class="text-muted small mb-0">Log your activities and monitor improvements</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="dashboard-card h-100">
+                    <div class="p-4 text-center">
+                        <div class="step-number rounded-circle bg-primary text-white mx-auto mb-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">4</div>
+                        <h5>Earn Rewards</h5>
+                        <p class="text-muted small mb-0">Get points and redeem for exclusive benefits</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Testimonials Section -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold mb-3">What Our Members Say</h2>
+        <p class="lead text-muted mb-0">Hear from people who have transformed their health with HealthXP</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar rounded-circle bg-light me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user text-primary fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Sarah Johnson</h5>
+                            <p class="text-muted mb-0 small">Member since 2022</p>
+                        </div>
+                    </div>
+                    <p class="mb-2">"HealthXP has completely changed how I approach my fitness goals. The reward system keeps me motivated, and I've made significant progress!"</p>
+                    <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar rounded-circle bg-light me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user text-primary fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Michael Chen</h5>
+                            <p class="text-muted mb-0 small">Member since 2021</p>
+                        </div>
+                    </div>
+                    <p class="mb-2">"The tracking tools are incredible! I can see my progress visually, which helps me stay focused on my health journey. Highly recommend!"</p>
+                    <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar rounded-circle bg-light me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user text-primary fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Emily Rodriguez</h5>
+                            <p class="text-muted mb-0 small">Member since 2023</p>
+                        </div>
+                    </div>
+                    <p class="mb-2">"As a busy professional, HealthXP makes it easy to maintain my health goals. The community support is fantastic and keeps me accountable."</p>
+                    <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-3">Ready to Start Your Health Journey?</h2>
+                <p class="lead mb-0">Join thousands of members already transforming their lives with HealthXP.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-5">
+                        <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                    </a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg px-5">
+                        <i class="fas fa-user-plus me-2"></i> Sign Up Now
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

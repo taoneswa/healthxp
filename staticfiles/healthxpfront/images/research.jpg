@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#9b59b6"/>
+  <rect x="100" y="150" width="600" height="300" fill="#8e44ad"/>
+  <g stroke="#ecf0f1" stroke-width="10" fill="none">
+    <circle cx="300" cy="300" r="100"/>
+    <line x1="370" y1="370" x2="500" y2="500"/>
+  </g>
+  <g fill="#ecf0f1">
+    <rect x="450" y="250" width="40" height="100"/>
+    <rect x="500" y="200" width="40" height="150"/>
+    <rect x="550" y="300" width="40" height="50"/>
+  </g>
+  <text x="400" y="500" font-family="Arial" font-size="48" text-anchor="middle" fill="#ecf0f1">RESEARCH</text>
+  <g fill="none" stroke="#ecf0f1" stroke-width="4">
+    <path d="M650,150 L650,450 L100,450 L100,150 L650,150"/>
+    <path d="M680,120 L680,480 L70,480 L70,120 L680,120"/>
+  </g>
+</svg> 

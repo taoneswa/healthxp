@@ -1,0 +1,116 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Challenges - IPERI{% endblock %}
+
+{% block page_title %}Challenges{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title mb-0">Challenges</h5>
+            <a href="{% url 'healthxpadmin:challenge_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Challenge
+            </a>
+        </div>
+
+        {% if challenges %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Activity Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Target</th>
+                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Difficulty</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for challenge in challenges %}
+                    <tr>
+                        <td>
+                            {% if challenge.image %}
+                            <img src="{{ challenge.image.url }}" alt="{{ challenge.title }}" class="me-2" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
+                            {% endif %}
+                            {{ challenge.title }}
+                            {% if challenge.is_featured %}
+                            <span class="badge bg-warning ms-1">Featured</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ challenge.activity_type.name|default:"-" }}</td>
+                        <td>{{ challenge.start_date|date:"M j, Y" }}</td>
+                        <td>{{ challenge.end_date|date:"M j, Y" }}</td>
+                        <td>{{ challenge.target_count }}</td>
+                        <td>{{ challenge.points_reward }}</td>
+                        <td>
+                            {% if challenge.status == 'upcoming' %}
+                            <span class="badge bg-info">Upcoming</span>
+                            {% elif challenge.status == 'active' %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Completed</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if challenge.difficulty_level == 'beginner' %}
+                            <span class="badge bg-success">Beginner</span>
+                            {% elif challenge.difficulty_level == 'intermediate' %}
+                            <span class="badge bg-warning">Intermediate</span>
+                            {% else %}
+                            <span class="badge bg-danger">Advanced</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'healthxpadmin:challenge_update' challenge.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'healthxpadmin:challenge_delete' challenge.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No challenges found.</p>
+            <p class="text-muted">Click the "Add Challenge" button to create one.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

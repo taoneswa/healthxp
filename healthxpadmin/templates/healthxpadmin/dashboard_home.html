@@ -1,0 +1,207 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Dashboard - IPERI Admin{% endblock %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h3>Users</h3>
+            <p>{{ total_users }}</p>
+            <a href="{% url 'healthxpadmin:user_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h3>Activities</h3>
+            <p>{{ total_activities }}</p>
+            <a href="{% url 'healthxpadmin:activity_type_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h3>Challenges</h3>
+            <p>{{ total_challenges }}</p>
+            <a href="{% url 'healthxpadmin:challenge_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h3>Rewards</h3>
+            <p>{{ total_rewards }}</p>
+            <a href="{% url 'healthxpadmin:reward_list' %}" class="text-white">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Recent Activities -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Activities</h5>
+                <a href="{% url 'healthxpadmin:activity_log_list' %}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Activity</th>
+                                <th>Points</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activity in recent_activities %}
+                            <tr>
+                                <td>{{ activity.user.username }}</td>
+                                <td>{{ activity.activity_type.name }}</td>
+                                <td>{{ activity.points }}</td>
+                                <td>{{ activity.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No recent activities</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Challenges -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Challenges</h5>
+                <a href="{% url 'healthxpadmin:challenge_list' %}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Activity Type</th>
+                                <th>Points</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for challenge in recent_challenges %}
+                            <tr>
+                                <td>{{ challenge.title }}</td>
+                                <td>{{ challenge.activity_type.name }}</td>
+                                <td>{{ challenge.points_reward }}</td>
+                                <td>
+                                    <span class="badge {% if challenge.status == 'active' %}bg-success{% elif challenge.status == 'upcoming' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                        {{ challenge.status|title }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No recent challenges</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Recent Rewards -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Rewards</h5>
+                <a href="{% url 'healthxpadmin:reward_list' %}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Points Required</th>
+                                <th>Available</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reward in recent_rewards %}
+                            <tr>
+                                <td>{{ reward.name }}</td>
+                                <td>{{ reward.points_required }}</td>
+                                <td>{{ reward.available_quantity }}</td>
+                                <td>
+                                    <span class="badge {% if reward.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ reward.is_active|yesno:"Active,Inactive" }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No rewards found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Subscriptions -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Subscriptions</h5>
+                <a href="{% url 'healthxpadmin:subscription_list' %}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subscription in recent_subscriptions %}
+                            <tr>
+                                <td>{{ subscription.user.username }}</td>
+                                <td>{{ subscription.subscription_type }}</td>
+                                <td>
+                                    <span class="badge {% if subscription.status == 'active' %}bg-success{% elif subscription.status == 'expired' %}bg-danger{% else %}bg-warning{% endif %}">
+                                        {{ subscription.status|title }}
+                                    </span>
+                                </td>
+                                <td>{{ subscription.end_date|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No recent subscriptions</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

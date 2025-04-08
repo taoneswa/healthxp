@@ -1,0 +1,199 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}My Achievements - HealthXP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        {% with active_tab='achievements' %}
+            {% include 'healthxpfront/includes/sidebar.html' %}
+        {% endwith %}
+        
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <h2 class="mb-4">My Achievements</h2>
+            
+            <!-- Achievement Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary-subtle text-primary">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="stat-value text-primary">{{ user_achievements|length }}</div>
+                        <div class="stat-label">Total Achievements</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success-subtle text-success">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-value text-success">{{ user.profile.current_streak }}</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-warning-subtle text-warning">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-value text-warning">{{ available_achievements|length }}</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Earned Achievements -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Earned Achievements</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if user_achievements %}
+                        <div class="achievement-grid">
+                            {% for achievement in user_achievements %}
+                                <div class="achievement-item earned">
+                                    <div class="achievement-icon">
+                                        <i class="{{ achievement.achievement.icon_class }}"></i>
+                                    </div>
+                                    <div class="achievement-info">
+                                        <h6 class="mb-1">{{ achievement.achievement.name }}</h6>
+                                        <p class="small text-muted mb-1">{{ achievement.achievement.description }}</p>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle me-1"></i> Earned
+                                            </span>
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-award me-1"></i> +{{ achievement.achievement.points_reward }} points
+                                            </span>
+                                        </div>
+                                        <p class="small text-muted mt-2 mb-0">
+                                            Earned on {{ achievement.date_earned|date:"M d, Y" }}
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="p-4 text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-medal fa-3x text-muted"></i>
+                            </div>
+                            <h5>No Achievements Yet</h5>
+                            <p class="text-muted">Start completing activities and challenges to earn achievements!</p>
+                            <a href="{% url 'activity_create' %}" class="btn btn-primary">Log an Activity</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Available Achievements -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Available Achievements</h5>
+                    <span class="badge bg-primary">{{ available_achievements|length }} remaining</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if available_achievements %}
+                        <div class="achievement-grid">
+                            {% for achievement in available_achievements %}
+                                <div class="achievement-item locked">
+                                    <div class="achievement-icon locked">
+                                        <i class="{{ achievement.icon_class }}"></i>
+                                    </div>
+                                    <div class="achievement-info">
+                                        <h6 class="mb-1">{{ achievement.name }}</h6>
+                                        <p class="small text-muted mb-1">{{ achievement.description }}</p>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-lock me-1"></i> Locked
+                                            </span>
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-award me-1"></i> +{{ achievement.points_reward }} points
+                                            </span>
+                                        </div>
+                                        <p class="small text-muted mt-2 mb-0">
+                                            {% if achievement.achievement_type == 'activity_count' %}
+                                                Complete {{ achievement.required_count }} activities
+                                            {% elif achievement.achievement_type == 'streak' %}
+                                                Maintain a {{ achievement.required_count }}-day streak
+                                            {% elif achievement.achievement_type == 'points' %}
+                                                Earn {{ achievement.required_count }} total points
+                                            {% elif achievement.achievement_type == 'challenge' %}
+                                                Complete {{ achievement.required_count }} challenges
+                                            {% else %}
+                                                Special achievement
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="p-4 text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-trophy fa-3x text-success"></i>
+                            </div>
+                            <h5>All Achievements Earned!</h5>
+                            <p class="text-muted">Congratulations! You've earned all available achievements.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .achievement-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .achievement-item {
+        display: flex;
+        background-color: #f8f9fa;
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.2s ease;
+    }
+    
+    .achievement-item:hover {
+        transform: translateY(-5px);
+    }
+    
+    .achievement-item.earned {
+        border-left: 4px solid #28a745;
+    }
+    
+    .achievement-item.locked {
+        border-left: 4px solid #6c757d;
+        opacity: 0.8;
+    }
+    
+    .achievement-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        background-color: #e9ecef;
+        color: #495057;
+        font-size: 1.5rem;
+    }
+    
+    .achievement-icon.locked {
+        background-color: #dee2e6;
+        color: #adb5bd;
+    }
+    
+    .achievement-info {
+        flex: 1;
+        padding: 1rem;
+    }
+</style>
+{% endblock %} 

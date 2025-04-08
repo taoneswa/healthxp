@@ -1,0 +1,96 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Activity Types - IPERI{% endblock %}
+
+{% block page_title %}Activity Types{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title mb-0">Activity Types</h5>
+            <a href="{% url 'healthxpadmin:activity_type_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Activity Type
+            </a>
+        </div>
+
+        {% if activity_types %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity_type in activity_types %}
+                    <tr>
+                        <td>
+                            <i class="{{ activity_type.icon_class }} fa-lg"></i>
+                        </td>
+                        <td>{{ activity_type.name }}</td>
+                        <td>{{ activity_type.description|truncatechars:50 }}</td>
+                        <td>{{ activity_type.points }}</td>
+                        <td>
+                            {% if activity_type.is_active %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ activity_type.created_at|date:"M j, Y" }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'healthxpadmin:activity_type_update' activity_type.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'healthxpadmin:activity_type_delete' activity_type.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No activity types found.</p>
+            <p class="text-muted">Click the "Add Activity Type" button to create one.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

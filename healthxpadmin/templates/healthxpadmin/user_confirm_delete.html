@@ -1,0 +1,26 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Delete User - IPERI{% endblock %}
+
+{% block page_title %}Delete User{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <p class="lead">Are you sure you want to delete user "{{ object.username }}"?</p>
+        <p class="text-danger">This action cannot be undone.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete User
+                </button>
+                <a href="{% url 'healthxpadmin:user_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

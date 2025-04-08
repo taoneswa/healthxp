@@ -1,0 +1,451 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}Leaderboard - HealthXP{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            {% with active_tab='leaderboard' %}
+                {% include 'healthxpfront/includes/sidebar.html' %}
+            {% endwith %}
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- User Stats Card -->
+                <div class="user-stats-card mb-4">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            {% if request.user.profile.profile_picture %}
+                                <img src="{{ request.user.profile.profile_picture.url }}" alt="{{ request.user.username }}">
+                            {% else %}
+                                <img src="{% static 'healthxpfront/images/default-avatar.png' %}" alt="{{ request.user.username }}">
+                            {% endif %}
+                        </div>
+                        <div class="user-details">
+                            <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+                            <p class="text-muted">Member since {{ request.user.date_joined|date:"M Y" }}</p>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ request.user.profile.points }}</div>
+                            <div class="stat-label">Points</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ request.user.profile.streak_count }}</div>
+                            <div class="stat-label">Day Streak</div>
+                        </div>
+                        {% if user_rank %}
+                        <div class="stat-item">
+                            <div class="stat-value">#{{ user_rank }}</div>
+                            <div class="stat-label">Rank</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Filters Card -->
+                <div class="filters-card mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Time Period</label>
+                            <select class="form-select" id="time-period">
+                                <option value="all-time" {% if time_period == 'all-time' %}selected{% endif %}>All Time</option>
+                                <option value="this-week" {% if time_period == 'this-week' %}selected{% endif %}>This Week</option>
+                                <option value="this-month" {% if time_period == 'this-month' %}selected{% endif %}>This Month</option>
+                                <option value="this-year" {% if time_period == 'this-year' %}selected{% endif %}>This Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Activity Type</label>
+                            <select class="form-select" id="activity-type">
+                                <option value="all" {% if activity_type == 'all' %}selected{% endif %}>All Activities</option>
+                                {% for type in activity_types %}
+                                <option value="{{ type.id }}" {% if activity_type == type.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ type.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {% if leaderboard_entries %}
+                <!-- Leaderboard Card -->
+                <div class="leaderboard-card">
+                    <div class="leaderboard-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-trophy me-2"></i>
+                            <h4 class="mb-0">Leaderboard</h4>
+                        </div>
+                        <div class="total-participants">
+                            {{ total_participants }} Participants
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover leaderboard-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 80px;">Rank</th>
+                                    <th>User</th>
+                                    <th class="text-center" style="width: 120px;">Activities</th>
+                                    <th class="text-center" style="width: 120px;">Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in leaderboard_entries %}
+                                    <tr {% if entry.user == request.user %}class="current-user-row"{% endif %}>
+                                        <td class="text-center">
+                                            <div class="rank-number">#{{ entry.rank }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-avatar-small me-3">
+                                                    {% if entry.profile.profile_picture %}
+                                                        <img src="{{ entry.profile.profile_picture.url }}" alt="{{ entry.user.username }}">
+                                                    {% else %}
+                                                        <img src="{% static 'healthxpfront/images/default-avatar.png' %}" alt="{{ entry.user.username }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ entry.user.get_full_name|default:entry.user.username }}</h6>
+                                                    <small class="text-muted">Member since {{ entry.member_since|date:"M Y" }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="activity-badge">{{ entry.activities_count }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="points-badge">{{ entry.points }}</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {% if leaderboard.has_other_pages %}
+                    <div class="pagination-wrapper">
+                        <nav aria-label="Leaderboard pagination">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if leaderboard.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if time_period != 'all-time' %}&period={{ time_period }}{% endif %}{% if activity_type != 'all' %}&activity={{ activity_type }}{% endif %}" aria-label="First">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ leaderboard.previous_page_number }}{% if time_period != 'all-time' %}&period={{ time_period }}{% endif %}{% if activity_type != 'all' %}&activity={{ activity_type }}{% endif %}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {% for num in leaderboard.paginator.page_range %}
+                                    {% if leaderboard.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > leaderboard.number|add:'-3' and num < leaderboard.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}{% if time_period != 'all-time' %}&period={{ time_period }}{% endif %}{% if activity_type != 'all' %}&activity={{ activity_type }}{% endif %}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if leaderboard.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ leaderboard.next_page_number }}{% if time_period != 'all-time' %}&period={{ time_period }}{% endif %}{% if activity_type != 'all' %}&activity={{ activity_type }}{% endif %}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ leaderboard.paginator.num_pages }}{% if time_period != 'all-time' %}&period={{ time_period }}{% endif %}{% if activity_type != 'all' %}&activity={{ activity_type }}{% endif %}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="fas fa-trophy fa-3x mb-3 text-muted"></i>
+                    <h4>No Participants Yet</h4>
+                    <p class="text-muted">Be the first to join and earn points!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        background-color: #f8f9fa;
+        min-height: calc(100vh - 70px);
+    }
+
+    /* User Stats Card */
+    .user-stats-card {
+        background: var(--primary-color);
+        border-radius: 15px;
+        padding: 2rem;
+        color: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid rgba(255,255,255,0.2);
+        overflow: hidden;
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-details h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .user-details p {
+        margin: 0;
+        opacity: 0.8;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1rem;
+    }
+
+    .stat-item {
+        background: rgba(255,255,255,0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    /* Filters Card */
+    .filters-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    .form-select {
+        border-radius: 10px;
+        border-color: #dee2e6;
+        padding: 0.75rem 1rem;
+    }
+
+    /* Leaderboard Card */
+    .leaderboard-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .leaderboard-header {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .leaderboard-header h4 {
+        color: var(--primary-color);
+    }
+
+    .total-participants {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .leaderboard-table th {
+        background-color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: #6c757d;
+        padding: 1rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .leaderboard-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .user-avatar-small {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+
+    .user-avatar-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .rank-number {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    .points-badge {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+
+    .activity-badge {
+        background: #6c757d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+
+    .current-user-row {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+    }
+
+    .pagination-wrapper {
+        padding: 1rem;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .page-link {
+        border-radius: 8px;
+        margin: 0 2px;
+        color: var(--primary-color);
+        padding: 0.5rem 1rem;
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 768px) {
+        .user-stats-card {
+            padding: 1.5rem;
+        }
+
+        .user-info {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+        }
+
+        .points-badge,
+        .activity-badge {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const timePeriodSelect = document.getElementById('time-period');
+        const activityTypeSelect = document.getElementById('activity-type');
+        
+        function updateLeaderboard() {
+            const timePeriod = timePeriodSelect.value;
+            const activityType = activityTypeSelect.value;
+            const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+            
+            let url = `?page=${currentPage}`;
+            if (timePeriod !== 'all-time') {
+                url += `&period=${timePeriod}`;
+            }
+            if (activityType !== 'all') {
+                url += `&activity=${activityType}`;
+            }
+            
+            window.location.href = url;
+        }
+        
+        timePeriodSelect.addEventListener('change', updateLeaderboard);
+        activityTypeSelect.addEventListener('change', updateLeaderboard);
+    });
+</script>
+{% endblock %} 

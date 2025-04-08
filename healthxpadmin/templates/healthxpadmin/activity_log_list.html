@@ -1,0 +1,102 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Activity Logs - IPERI{% endblock %}
+
+{% block page_title %}Activity Logs{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title mb-0">Activity Logs</h5>
+            <div>
+                <form class="d-inline-flex" method="get">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Search activities..." value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if activity_logs %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Activity Type</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Distance</th>
+                        <th>Calories</th>
+                        <th>Points</th>
+                        <th>Source</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in activity_logs %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'healthxpadmin:user_detail' log.user.pk %}" class="text-decoration-none">
+                                {{ log.user.username }}
+                            </a>
+                        </td>
+                        <td>{{ log.activity_type.name }}</td>
+                        <td>{{ log.date|date:"M j, Y" }}</td>
+                        <td>{% if log.duration %}{{ log.duration }} min{% else %}-{% endif %}</td>
+                        <td>{% if log.distance %}{{ log.distance }} km{% else %}-{% endif %}</td>
+                        <td>{% if log.calories %}{{ log.calories }} cal{% else %}-{% endif %}</td>
+                        <td>{{ log.points_earned }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ log.get_source_display }}</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'healthxpadmin:activity_log_detail' log.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No activity logs found.</p>
+            {% if request.GET.q %}
+            <p class="text-muted">Try adjusting your search criteria.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

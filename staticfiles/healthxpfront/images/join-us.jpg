@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f9f9f9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e5e5e5;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="face-grad" cx="50%" cy="35%" r="65%" fx="50%" fy="35%">
+      <stop offset="0%" style="stop-color:#8d5524;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6b3d1a;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="shirt-grad" cx="50%" cy="75%" r="50%" fx="50%" fy="75%">
+      <stop offset="0%" style="stop-color:#f1f1f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="600" height="900" fill="url(#bg-grad)" />
+  
+  <!-- Decorative elements -->
+  <g opacity="0.2">
+    <circle cx="100" cy="200" r="40" fill="#641e36" />
+    <circle cx="500" cy="300" r="60" fill="#641e36" />
+    <circle cx="200" cy="700" r="80" fill="#641e36" />
+    <circle cx="450" cy="800" r="50" fill="#641e36" />
+  </g>
+  
+  <!-- Figure outline -->
+  <g transform="translate(300, 450)">
+    <!-- Head and face -->
+    <circle cx="0" cy="-170" r="90" fill="url(#face-grad)" />
+    
+    <!-- Hair -->
+    <path d="M-90,-170 Q-100,-240 0,-260 Q100,-240 90,-170 Q50,-200 0,-200 Q-50,-200 -90,-170 Z" fill="#301d14" />
+    
+    <!-- Neck -->
+    <rect x="-20" y="-90" width="40" height="40" fill="#8d5524" />
+    
+    <!-- Shirt -->
+    <path d="M-20,-50 L-120,100 L-100,150 L-40,120 L-20,300 L20,300 L40,120 L100,150 L120,100 L20,-50 Z" fill="url(#shirt-grad)" />
+    
+    <!-- Arms -->
+    <path d="M-120,100 L-200,0 L-220,20 L-140,150 L-100,150 Z" fill="#f1f1f1" />
+    <path d="M120,100 L200,0 L220,20 L140,150 L100,150 Z" fill="#f1f1f1" />
+    
+    <!-- Face features -->
+    <g transform="translate(0, -170)">
+      <!-- Eyes -->
+      <ellipse cx="-30" cy="-10" rx="12" ry="8" fill="#301d14" />
+      <ellipse cx="30" cy="-10" rx="12" ry="8" fill="#301d14" />
+      
+      <!-- Smile -->
+      <path d="M-40,30 Q0,60 40,30" stroke="#301d14" stroke-width="5" fill="none" />
+      
+      <!-- Eyebrows -->
+      <path d="M-40,-25 Q-30,-30 -20,-25" stroke="#301d14" stroke-width="3" fill="none" />
+      <path d="M40,-25 Q30,-30 20,-25" stroke="#301d14" stroke-width="3" fill="none" />
+    </g>
+  </g>
+  
+  <!-- Raised hands overlay -->
+  <g transform="translate(300, 450)">
+    <path d="M-20,-80 L-70,-200 L-90,-190 L-40,-60 Z" fill="#8d5524" />
+    <path d="M20,-80 L70,-200 L90,-190 L40,-60 Z" fill="#8d5524" />
+  </g>
+  
+  <!-- Optional text banner at bottom -->
+  <rect x="50" y="750" width="500" height="100" rx="10" ry="10" fill="#641e36" opacity="0.9" />
+  <text x="300" y="810" font-family="Arial" font-size="36" text-anchor="middle" fill="#fff" font-weight="bold">JOIN US</text>
+</svg> 

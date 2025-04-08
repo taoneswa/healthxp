@@ -1,0 +1,370 @@
+{% extends 'healthxpfront/base.html' %}
+
+{% block title %}About Us - IPERI-ZIM{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>About Us</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">About Us</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-image">
+                <img src="{{ STATIC_URL }}healthxpfront/images/about-us.jpg" alt="IPERI-ZIM Team">
+            </div>
+            <div class="about-text">
+                <h2>Our Story</h2>
+                <p>IPERI-ZIM (International Pharmacotherapy Education and Research Initiative) was founded in 2015 by a dedicated group of pharmacists and healthcare professionals who recognized the need for specialized education and research in pharmacotherapy in Zimbabwe.</p>
+                <p>Our organization was built on the belief that by enhancing the knowledge and skills of healthcare professionals, we can significantly improve patient care outcomes across the country.</p>
+                <p>Since our inception, we have trained hundreds of healthcare professionals, conducted numerous research projects, and established key partnerships with local and international healthcare organizations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="mission-vision">
+    <div class="container">
+        <div class="row">
+            <div class="mission-box">
+                <div class="icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Our Mission</h3>
+                <p>To enhance healthcare delivery in Zimbabwe through advanced pharmacotherapy education, innovative research, and professional development of healthcare practitioners.</p>
+            </div>
+            <div class="vision-box">
+                <div class="icon"><i class="fas fa-eye"></i></div>
+                <h3>Our Vision</h3>
+                <p>To be the leading center of excellence in pharmacotherapy education and research in Southern Africa, contributing to improved patient outcomes and healthcare systems.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values -->
+<section class="values-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Core Values</h2>
+            <p>These principles guide our actions and decisions</p>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Excellence</h3>
+                <p>We strive for excellence in all our educational programs and research initiatives.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Integrity</h3>
+                <p>We uphold the highest ethical standards in our operations and relationships.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Collaboration</h3>
+                <p>We believe in the power of partnership and collaborative efforts to achieve common goals.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Innovation</h3>
+                <p>We embrace innovative approaches to address healthcare challenges in Zimbabwe.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-globe-africa"></i>
+                </div>
+                <h3>Community Impact</h3>
+                <p>We are committed to making a positive difference in the communities we serve.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+                <h3>Continuous Learning</h3>
+                <p>We promote lifelong learning and professional development for all healthcare professionals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Team -->
+<section class="team-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Team</h2>
+            <p>Meet the dedicated professionals behind IPERI-ZIM</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{{ STATIC_URL }}healthxpfront/images/team1.jpg" alt="Team Member">
+                </div>
+                <div class="team-info">
+                    <h3>Dr. Sarah Moyo</h3>
+                    <p class="position">Founder & Executive Director</p>
+                    <p class="bio">Dr. Moyo is a clinical pharmacist with over 15 years of experience in healthcare and education.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{{ STATIC_URL }}healthxpfront/images/team2.jpg" alt="Team Member">
+                </div>
+                <div class="team-info">
+                    <h3>Prof. John Ncube</h3>
+                    <p class="position">Research Director</p>
+                    <p class="bio">Prof. Ncube leads our research initiatives with his extensive background in pharmacology research.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{{ STATIC_URL }}healthxpfront/images/team3.jpg" alt="Team Member">
+                </div>
+                <div class="team-info">
+                    <h3>Dr. Mary Chikwanda</h3>
+                    <p class="position">Education Coordinator</p>
+                    <p class="bio">Dr. Chikwanda develops and manages our educational programs and training initiatives.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{{ STATIC_URL }}healthxpfront/images/team4.jpg" alt="Team Member">
+                </div>
+                <div class="team-info">
+                    <h3>Mr. David Mwanza</h3>
+                    <p class="position">Operations Manager</p>
+                    <p class="bio">Mr. Mwanza oversees the day-to-day operations and administration of IPERI-ZIM.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* About Page Styles */
+    
+    .page-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        background-color: transparent;
+        margin-top: 10px;
+    }
+    
+    .breadcrumb-item {
+        color: #ddd;
+    }
+    
+    .breadcrumb-item a {
+        color: white;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: #ddd;
+        padding: 0 10px;
+    }
+    
+    .about-section {
+        padding: 80px 0;
+    }
+    
+    .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
+    
+    .about-image img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .about-text h2 {
+        font-size: 36px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+    
+    .about-text p {
+        margin-bottom: 20px;
+    }
+    
+    .mission-vision {
+        padding: 80px 0;
+        background-color: #f9f9f9;
+    }
+    
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    .mission-box, .vision-box {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .mission-box .icon, .vision-box .icon {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-color);
+        color: white;
+        font-size: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+    }
+    
+    .mission-box h3, .vision-box h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    
+    .values-section {
+        padding: 80px 0;
+    }
+    
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .value-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .value-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .value-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-color);
+        color: white;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+    }
+    
+    .value-card h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+    }
+    
+    .team-section {
+        padding: 80px 0;
+        background-color: #f9f9f9;
+    }
+    
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .team-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .team-image {
+        height: 250px;
+        overflow: hidden;
+    }
+    
+    .team-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .team-card:hover .team-image img {
+        transform: scale(1.1);
+    }
+    
+    .team-info {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .team-info h3 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    
+    .position {
+        color: var(--primary-color);
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .bio {
+        font-size: 14px;
+        color: #666;
+    }
+    
+    @media (max-width: 768px) {
+        .about-content, .row {
+            grid-template-columns: 1fr;
+        }
+        
+        .about-image {
+            order: -1;
+        }
+        
+        .page-header {
+            padding: 40px 0;
+        }
+    }
+</style>
+{% endblock %} 

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+    <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#641e36;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#9b2e53;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background Circle -->
+    <circle cx="100" cy="100" r="90" fill="url(#logoGradient)" />
+
+    <!-- Center Cross (representing healthcare) -->
+    <path d="M100,55 L100,145 M55,100 L145,100" stroke="white" stroke-width="12"
+        stroke-linecap="round" />
+
+    <!-- Orbit Rings (galaxy concept) -->
+    <ellipse cx="100" cy="100" rx="70" ry="30" stroke="white" stroke-width="3" fill="none"
+        transform="rotate(30,100,100)" />
+    <ellipse cx="100" cy="100" rx="70" ry="20" stroke="white" stroke-width="3" fill="none"
+        transform="rotate(-30,100,100)" />
+
+    <!-- Dots (representing stars/planets) -->
+    <circle cx="160" cy="80" r="5" fill="white" />
+    <circle cx="40" cy="120" r="5" fill="white" />
+    <circle cx="130" cy="150" r="5" fill="white" />
+    <circle cx="70" cy="50" r="5" fill="white" />
+
+    <!-- Text -->
+    <text x="100" y="185" font-family="Arial" font-size="22" font-weight="bold" text-anchor="middle"
+        fill="white">HGP</text>
+</svg> 

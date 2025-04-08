@@ -1,0 +1,251 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}{{ subscription.subscription_type.name }} Subscription - IPERI{% endblock %}
+
+{% block page_title %}Subscription Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Subscription Information -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-file-invoice-dollar text-primary me-2"></i>Subscription Information
+                </h5>
+                <div class="btn-group">
+                    <a href="{% url 'healthxpadmin:subscription_update' subscription.pk %}" 
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-edit me-2"></i>Edit
+                    </a>
+                    {% if subscription.is_active %}
+                        <button type="button" 
+                                class="btn btn-outline-danger" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#cancelModal">
+                            <i class="fas fa-ban me-2"></i>Cancel
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- User Information -->
+                <div class="d-flex align-items-center mb-4">
+                    <div class="avatar-lg me-3">
+                        {% if subscription.user.profile.avatar %}
+                            <img src="{{ subscription.user.profile.avatar.url }}" 
+                                 alt="User Avatar"
+                                 class="rounded-circle img-thumbnail">
+                        {% else %}
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" 
+                                 style="width: 64px; height: 64px;">
+                                <i class="fas fa-user text-secondary" style="font-size: 24px;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h5 class="mb-1">{{ subscription.user.get_full_name }}</h5>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-envelope me-2"></i>{{ subscription.user.email }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Subscription Status -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2">Status</h6>
+                    <div class="d-flex align-items-center gap-3">
+                        {% if subscription.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                        <span class="badge bg-info">{{ subscription.subscription_type.name }}</span>
+                        <span class="badge bg-primary">${{ subscription.subscription_type.amount }}/month</span>
+                    </div>
+                </div>
+
+                <!-- Subscription Type Details -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2">Plan Details</h6>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ subscription.subscription_type.name }}</h5>
+                            <p class="card-text">{{ subscription.subscription_type.description }}</p>
+                            <h6 class="mb-3">Features:</h6>
+                            <ul class="list-unstyled mb-0">
+                                {% for feature in subscription.subscription_type.features.splitlines %}
+                                    <li class="mb-2">
+                                        <i class="fas fa-check text-success me-2"></i>{{ feature }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscription Dates -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2">Dates</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-plus text-success me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Start Date</small>
+                                    <strong>{{ subscription.start_date|date:"F j, Y" }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-times text-danger me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">End Date</small>
+                                    <strong>{{ subscription.end_date|date:"F j, Y"|default:"No end date" }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div>
+                    <h6 class="text-muted mb-2">Additional Information</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-info me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Created</small>
+                                    <strong>{{ subscription.created_at|date:"F j, Y" }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-edit text-warning me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Last Updated</small>
+                                    <strong>{{ subscription.updated_at|date:"F j, Y" }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Payment History -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-light py-3">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history text-primary me-2"></i>Payment History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if payments %}
+                    <div class="timeline">
+                        {% for payment in payments %}
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">${{ payment.amount }}</h6>
+                                    <p class="text-muted mb-0">
+                                        <small>
+                                            <i class="fas fa-calendar me-1"></i>{{ payment.date|date:"F j, Y" }}
+                                        </small>
+                                    </p>
+                                    <p class="text-muted mb-0">
+                                        <small>
+                                            <i class="fas fa-credit-card me-1"></i>{{ payment.method }}
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-receipt text-muted mb-3" style="font-size: 2rem;"></i>
+                        <p class="text-muted mb-0">No payment history available</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+{% if subscription.is_active %}
+    <div class="modal fade" id="cancelModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancel Subscription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this subscription?</p>
+                    <p class="text-muted">This will immediately end the subscription for 
+                       <strong>{{ subscription.user.get_full_name }}</strong>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="{% url 'healthxpadmin:subscription_cancel' subscription.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-ban me-2"></i>Cancel Subscription
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+    .avatar-lg {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 3rem;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 0;
+        height: 100%;
+        width: 2px;
+        background: var(--bs-light);
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+    
+    .timeline-marker {
+        position: absolute;
+        left: -3rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background: var(--bs-primary);
+        border: 2px solid #fff;
+    }
+    
+    .timeline-content {
+        background: var(--bs-light);
+        padding: 1rem;
+        border-radius: 0.25rem;
+    }
+</style>
+{% endblock %} 

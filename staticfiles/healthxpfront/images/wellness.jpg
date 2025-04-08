@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#2ecc71"/>
+  <rect x="100" y="150" width="600" height="300" fill="#27ae60"/>
+  <g fill="#ecf0f1">
+    <path d="M400,200 L450,300 L400,400 L350,300 Z"/>
+    <circle cx="400" cy="300" r="50" fill="#27ae60" stroke="#ecf0f1" stroke-width="8"/>
+  </g>
+  <g stroke="#ecf0f1" stroke-width="3" fill="none">
+    <path d="M250,250 Q400,150 550,250"/>
+    <path d="M250,350 Q400,450 550,350"/>
+    <circle cx="250" cy="300" r="20"/>
+    <circle cx="550" cy="300" r="20"/>
+  </g>
+  <text x="400" y="500" font-family="Arial" font-size="48" text-anchor="middle" fill="#ecf0f1">WELLNESS</text>
+  <g fill="none" stroke="#ecf0f1" stroke-width="4">
+    <path d="M650,150 L650,450 L100,450 L100,150 L650,150"/>
+    <path d="M680,120 L680,480 L70,480 L70,120 L680,120"/>
+  </g>
+</svg> 

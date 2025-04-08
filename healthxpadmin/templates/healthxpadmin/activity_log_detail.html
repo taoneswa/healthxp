@@ -1,0 +1,109 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}Activity Log Details - IPERI{% endblock %}
+
+{% block page_title %}Activity Log Details{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-4">Activity Information</h5>
+                <table class="table">
+                    <tr>
+                        <th>User:</th>
+                        <td>
+                            <a href="{% url 'healthxpadmin:user_detail' activity_log.user.pk %}" class="text-decoration-none">
+                                {{ activity_log.user.username }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Activity Type:</th>
+                        <td>{{ activity_log.activity_type.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date:</th>
+                        <td>{{ activity_log.date|date:"F j, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Duration:</th>
+                        <td>{% if activity_log.duration %}{{ activity_log.duration }} minutes{% else %}-{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Distance:</th>
+                        <td>{% if activity_log.distance %}{{ activity_log.distance }} kilometers{% else %}-{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Calories:</th>
+                        <td>{% if activity_log.calories %}{{ activity_log.calories }} calories{% else %}-{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Points Earned:</th>
+                        <td>{{ activity_log.points_earned }}</td>
+                    </tr>
+                    <tr>
+                        <th>Source:</th>
+                        <td><span class="badge bg-info">{{ activity_log.get_source_display }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Created At:</th>
+                        <td>{{ activity_log.created_at|date:"F j, Y H:i:s" }}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="col-md-6">
+                <h5 class="mb-4">Additional Information</h5>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Notes</h6>
+                        {% if activity_log.notes %}
+                        <p class="card-text">{{ activity_log.notes|linebreaks }}</p>
+                        {% else %}
+                        <p class="card-text text-muted">No notes available</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Activity Type Details</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Icon:</th>
+                                <td><i class="{{ activity_log.activity_type.icon_class }} fa-lg"></i></td>
+                            </tr>
+                            <tr>
+                                <th>Description:</th>
+                                <td>{{ activity_log.activity_type.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>Base Points:</th>
+                                <td>{{ activity_log.activity_type.points }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if activity_log.activity_type.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{% url 'healthxpadmin:activity_log_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

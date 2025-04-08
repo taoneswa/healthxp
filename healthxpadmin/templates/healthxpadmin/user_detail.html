@@ -1,0 +1,126 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}{{ user.username }} - IPERI{% endblock %}
+
+{% block page_title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 150px;">
+                    <i class="fas fa-user fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h5 class="mb-4">User Information</h5>
+                <table class="table">
+                    <tr>
+                        <th>Username:</th>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>First Name:</th>
+                        <td>{{ user.first_name|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Name:</th>
+                        <td>{{ user.last_name|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Joined:</th>
+                        <td>{{ user.date_joined|date:"F j, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            {% if user.is_active %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5 class="mb-4">Profile Information</h5>
+                <table class="table">
+                    <tr>
+                        <th>Points:</th>
+                        <td>{{ user.profile.points }}</td>
+                    </tr>
+                    <tr>
+                        <th>Birth Date:</th>
+                        <td>{{ user.profile.birth_date|date:"F j, Y"|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Height:</th>
+                        <td>{{ user.profile.height|default:"-" }} cm</td>
+                    </tr>
+                    <tr>
+                        <th>Weight:</th>
+                        <td>{{ user.profile.weight|default:"-" }} kg</td>
+                    </tr>
+                    <tr>
+                        <th>Current Streak:</th>
+                        <td>{{ user.profile.current_streak }} days</td>
+                    </tr>
+                    <tr>
+                        <th>Longest Streak:</th>
+                        <td>{{ user.profile.longest_streak }} days</td>
+                    </tr>
+                    <tr>
+                        <th>Last Activity:</th>
+                        <td>{{ user.profile.last_activity_date|date:"F j, Y"|default:"Never" }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h5 class="mb-4">Recent Activities</h5>
+                {% if recent_activities %}
+                <div class="list-group">
+                    {% for activity in recent_activities %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ activity.activity_type.name }}</h6>
+                            <small>{{ activity.date|date:"M j, Y" }}</small>
+                        </div>
+                        <p class="mb-1">
+                            {% if activity.duration %}Duration: {{ activity.duration }} minutes{% endif %}
+                            {% if activity.distance %}Distance: {{ activity.distance }} km{% endif %}
+                            {% if activity.calories %}Calories: {{ activity.calories }}{% endif %}
+                        </p>
+                        <small>Points earned: {{ activity.points_earned }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No recent activities</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{% url 'healthxpadmin:user_update' user.pk %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit User
+            </a>
+            <a href="{% url 'healthxpadmin:user_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

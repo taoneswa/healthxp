@@ -1,0 +1,639 @@
+{% extends 'healthxpfront/base.html' %}
+{% load static %}
+
+{% block title %}Health Galaxy Park - IPERI-ZIM{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>HEALTH GALAXY PARK</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Health Galaxy Park</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- HGP Hero Section -->
+<section class="hgp-hero">
+    <div class="container">
+        <div class="hgp-hero-content">
+            <h2 class="tagline">Delivering World-Class, Sustainable Healthcare.</h2>
+        </div>
+    </div>
+</section>
+
+<!-- HGP Overview -->
+<section class="hgp-overview">
+    <div class="container">
+        <div class="section-header">
+            <div class="logo-container">
+                <img src="{% static 'healthxpfront/images/hgp-logo.svg' %}" alt="HGP Logo" class="hgp-logo">
+                <h2>HGPHITSCC</h2>
+            </div>
+        </div>
+        
+        <div class="overview-content">
+            <h3>HGP</h3>
+            <p>Health Galaxy Park (HGP) was established by a team of technocrats from the University of Zimbabwe as an investment vehicle targeting the health sector in Zimbabwe aimed at capacity rebuilding of the national health care service. The HGP has engaged potential investors from the United States of America (USA) with a proposal for the establishment of a Health Infrastructure, Technology and Skills Coordination Centre (HITSCC) and a Pharmaceutical Innovation Hub in Harare, Zimbabwe.</p>
+            
+            <p>This project leverages on the already established foundation laid down by the International Pharmacotherapy Education and Research Initiative (IPERI) of the University of Zimbabwe in collaboration with the Center for Integrated Global Biomedical Sciences of the University at Buffalo (State University of New York), USA.</p>
+            
+            <p>HITSCC (Pvt) Ltd.'s main objective is to promote Public Private Partnerships into the health sector through various projects. All the health projects the team has promoted into Zimbabwe during the 20-year relationship have been donor driven. HITSCC (Pvt) Ltd endeavors to bring in both donor driven and investor driven health related projects. The aim is to promote projects that transform Zimbabwe's and the regions' health care sector.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Vision and Mission -->
+<section class="vision-mission">
+    <div class="container">
+        <div class="row">
+            <div class="vision-box">
+                <div class="icon"><i class="fas fa-eye"></i></div>
+                <h3>VISION</h3>
+                <p>To establish and sustain a world-class healthcare delivery model that ensures excellence, innovation, and long-term impact.</p>
+            </div>
+            <div class="mission-box">
+                <div class="icon"><i class="fas fa-bullseye"></i></div>
+                <h3>MISSION</h3>
+                <p>To coordinate the development of high-end human capital in the health sector through research and innovation, promoting cutting-edge technologies for industrialization.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Objectives -->
+<section class="objectives-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Objectives</h2>
+        </div>
+        <div class="objectives-grid">
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Biomedical Research & Innovation</h3>
+                <p>Establishing a center dedicated to advancing biomedical research and supporting local pharmaceutical industries.</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <h3>Pharmacology Research Support</h3>
+                <p>Facilitating local and international pharmacology research, including postgraduate studies and pharmaceutical industry advancements.</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-globe-africa"></i>
+                </div>
+                <h3>Global Collaboration & STEM Education</h3>
+                <p>Promoting partnerships in health, social innovation, and STEM education through the Global Partnership Studio (GPS).</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Policy Advocacy for Economic Growth</h3>
+                <p>Driving policies that enhance the pharmaceutical and nutraceutical sectors' contributions to national economic transformation through exports.</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3>Tech-Driven Growth & Investment</h3>
+                <p>Coordinating virtual communication and information systems for research, services, and training to accelerate investment in the health sector.</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Investor & Partner Engagement</h3>
+                <p>Connecting international partners, investment teams, and venture capitalists to expand healthcare investment opportunities.</p>
+            </div>
+            
+            <div class="objective-card">
+                <div class="objective-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <h3>Governance & Investment Readiness</h3>
+                <p>Providing expert guidance on governance to create a favorable environment for investors.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HITSCC Section -->
+<section class="hitscc-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>HITSCC</h2>
+        </div>
+        <div class="hitscc-content">
+            <p>Health Infrastructure Technology and Skills Coordination Centre (HITSCC) is transitioning existing capacity-building programs into sustainable business development projects. The focus will be on strengthening healthcare workforce infrastructure and establishing a pharmaceutical innovation hub.</p>
+            
+            <p>This initiative will integrate training programs with business development, transforming current videoconferencing efforts into location-based community portals that support healthcare, education, and business applications. Additionally, an advanced national health informatics network will be developed, using AI-driven data analysis to enhance decision-making in the healthcare sector.</p>
+            
+            <p>Biomedical research infrastructure will also be established to support business incubation and attract external investment.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Components Grid -->
+<section class="components-grid">
+    <div class="container">
+        <div class="grid-row">
+            <div class="component-card">
+                <div class="component-image">
+                    <img src="{% static 'healthxpfront/images/pharma-hub.jpg' %}" alt="Pharmaceutical Innovation Hub">
+                </div>
+                <div class="component-content">
+                    <h3>Pharmaceutical Innovation Hub</h3>
+                    <p>The Pharmaceutical Innovation Hub will drive drug development and pharmaceutical manufacturing, providing key national resources such as a formulation and bioequivalence testing facility, a national antimicrobial resistance testing unit, and a bioanalysis research and training center. It will also support quality assurance and management systems and feature cutting-edge genomics and proteomics research to advance pharmaceutical science in Zimbabwe.</p>
+                </div>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-image">
+                    <img src="{% static 'healthxpfront/images/cancer-center.jpg' %}" alt="Cancer Care & Research Center">
+                </div>
+                <div class="component-content">
+                    <h3>Cancer Care & Research Center</h3>
+                    <p>As part of the Pharmaceutical Innovation Hub, a comprehensive cancer care and research center will be developed. This center will include an oncology care program development unit, an oncology clinical research and implementation science program, and a drug development and biomarker innovation core. Additionally, the center will focus on community engagement and health IT in oncology, as well as natural product research for cancer treatment, bridging traditional medicine with modern oncology research.</p>
+                </div>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-image">
+                    <img src="{% static 'healthxpfront/images/smart-healthcare.jpg' %}" alt="Smart Healthcare & Innovation Park">
+                </div>
+                <div class="component-content">
+                    <h3>Smart Healthcare & Innovation Park</h3>
+                    <p>The HITSCC will also establish a smart city healthcare and biomedical research park at Health Galaxy Park (HGP). This facility will feature integrated information technology and biomedical instrumentation, fostering digital health solutions and cutting-edge medical technologies. The park will be twinned with the Buffalo Niagara Medical Campus (USA), enabling knowledge exchange and collaboration. Furthermore, a business incubator will be developed alongside government partnerships in emergency medicine, trauma care, and pain management training, ensuring a holistic approach to healthcare innovation and workforce development.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Partners Section -->
+<section class="partners-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Partners</h2>
+        </div>
+        <div class="partners-logo-grid">
+            <!-- This section would contain partner logos -->
+            <div class="partner-logo"><img src="{% static 'healthxpfront/images/partner1.svg' %}" alt="Partner 1"></div>
+            <div class="partner-logo"><img src="{% static 'healthxpfront/images/partner2.svg' %}" alt="Partner 2"></div>
+            <div class="partner-logo"><img src="{% static 'healthxpfront/images/partner3.svg' %}" alt="Partner 3"></div>
+            <div class="partner-logo"><img src="{% static 'healthxpfront/images/partner4.svg' %}" alt="Partner 4"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Team</h2>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/tinell-magadzire.jpg' %}" alt="Tinell Magadzire">
+                </div>
+                <div class="team-info">
+                    <h3>Tinell Magadzire</h3>
+                    <p class="position">Administrator</p>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/tinashe-mudzviti.jpg' %}" alt="Tinashe Mudzviti">
+                </div>
+                <div class="team-info">
+                    <h3>Tinashe Mudzviti</h3>
+                    <p class="position">Research Training</p>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/victoria-chiwiza.jpg' %}" alt="Victoria Chiwiza">
+                </div>
+                <div class="team-info">
+                    <h3>Victoria Chiwiza</h3>
+                    <p class="position">Institutional Integration</p>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/fine-mazambara.jpg' %}" alt="Fine Mazambara">
+                </div>
+                <div class="team-info">
+                    <h3>Fine Mazambara</h3>
+                    <p class="position">Research Training</p>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/farai-muzambi.jpg' %}" alt="Farai Muzambi">
+                </div>
+                <div class="team-info">
+                    <h3>Farai Muzambi</h3>
+                    <p class="position">Laboratory Expert</p>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'healthxpfront/images/team/faithful-makita.jpg' %}" alt="Faithful Makita">
+                </div>
+                <div class="team-info">
+                    <h3>Faithful Makita</h3>
+                    <p class="position">Laboratory Expert</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Health Galaxy Park Page Styles */
+    .page-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+    }
+    
+    .breadcrumb {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        background-color: transparent;
+        margin-top: 10px;
+    }
+    
+    .breadcrumb-item {
+        color: #ddd;
+    }
+    
+    .breadcrumb-item a {
+        color: white;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: #ddd;
+        padding: 0 10px;
+    }
+    
+    /* HGP Hero Section */
+    .hgp-hero {
+        padding: 60px 0;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+    
+    .tagline {
+        font-size: 36px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+    
+    /* HGP Overview */
+    .hgp-overview {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+    
+    .hgp-logo {
+        width: 80px;
+        margin-right: 15px;
+    }
+    
+    .overview-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .overview-content h3 {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .overview-content p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    /* Vision and Mission */
+    .vision-mission {
+        padding: 60px 0;
+        background-color: #f9f9f9;
+    }
+    
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    .vision-box, .mission-box {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .vision-box .icon, .mission-box .icon {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-color);
+        color: white;
+        font-size: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+    }
+    
+    .vision-box h3, .mission-box h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    
+    /* Objectives Section */
+    .objectives-section {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .section-header h2 {
+        font-size: 36px;
+        color: var(--primary-color);
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+    
+    .section-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: var(--primary-color);
+    }
+    
+    .objectives-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .objective-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .objective-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .objective-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    
+    .objective-card h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    
+    .objective-card p {
+        color: #666;
+        line-height: 1.5;
+    }
+    
+    /* HITSCC Section */
+    .hitscc-section {
+        padding: 60px 0;
+        background-color: #f9f9f9;
+    }
+    
+    .hitscc-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .hitscc-content p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    /* Components Grid */
+    .components-grid {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+    
+    .grid-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .component-card {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        align-items: center;
+    }
+    
+    .component-image {
+        height: 250px;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    .component-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .component-content h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    
+    .component-content p {
+        line-height: 1.6;
+        color: #666;
+    }
+    
+    /* Partners Section */
+    .partners-section {
+        padding: 60px 0;
+        background-color: #f9f9f9;
+    }
+    
+    .partners-logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 30px;
+        align-items: center;
+    }
+    
+    .partner-logo {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .partner-logo img {
+        max-width: 100%;
+        max-height: 80px;
+    }
+    
+    /* Team Section */
+    .team-section {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+    
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 30px;
+    }
+    
+    .team-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .team-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .team-image {
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .team-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .team-info {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .team-info h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: var(--primary-color);
+    }
+    
+    .position {
+        color: #666;
+        font-weight: bold;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .component-card {
+            grid-template-columns: 1fr;
+        }
+        
+        .component-image {
+            height: 300px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .row {
+            grid-template-columns: 1fr;
+        }
+        
+        .tagline {
+            font-size: 28px;
+        }
+        
+        .team-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+        
+        .team-image {
+            height: 150px;
+        }
+    }
+</style>
+{% endblock %} 

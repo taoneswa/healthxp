@@ -1,0 +1,87 @@
+{% extends 'healthxpadmin/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Activity Type{% else %}Create Activity Type{% endif %} - IPERI{% endblock %}
+
+{% block page_title %}{% if form.instance.pk %}Edit Activity Type{% else %}Create Activity Type{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{ form.icon_class.id_for_label }}" class="form-label">Icon Class</label>
+                        {{ form.icon_class }}
+                        {% if form.icon_class.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.icon_class.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Enter a Font Awesome icon class (e.g., fas fa-running, fas fa-bicycle)
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.points.id_for_label }}" class="form-label">Points</label>
+                        {{ form.points }}
+                        {% if form.points.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.points.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.is_active }}
+                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                Active
+                            </label>
+                        </div>
+                        {% if form.is_active.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.is_active.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Activity Type
+                </button>
+                <a href="{% url 'healthxpadmin:activity_type_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

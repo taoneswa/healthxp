@@ -1,0 +1,218 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}My Challenges - HealthXP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="profile-card mb-4">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="img-fluid">
+                        {% else %}
+                            {{ user.first_name|first }}{{ user.last_name|first }}
+                        {% endif %}
+                    </div>
+                    <h5 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <p class="text-white-50 small mb-0">Member since {{ user.profile.date_joined|date:"M Y" }}</p>
+                </div>
+                <div class="p-3">
+                    <div class="row text-center py-3">
+                        <div class="col-6">
+                            <h5 class="mb-0 fw-bold text-primary">{{ user.profile.points }}</h5>
+                            <span class="text-muted small">Points</span>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="mb-0 fw-bold text-success">{{ user.profile.current_streak }}</h5>
+                            <span class="text-muted small">Day Streak</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav flex-column nav-pills mb-4" role="tablist">
+                <a class="nav-link mb-2" href="{% url 'dashboard' %}">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+                <a class="nav-link mb-2" href="{% url 'activity_list' %}">
+                    <i class="fas fa-running me-2"></i> Activities
+                </a>
+                <a class="nav-link active mb-2" href="{% url 'my_challenges' %}">
+                    <i class="fas fa-trophy me-2"></i> My Challenges
+                </a>
+                <a class="nav-link mb-2" href="{% url 'challenge_list' %}">
+                    <i class="fas fa-flag me-2"></i> All Challenges
+                </a>
+                <a class="nav-link mb-2" href="{% url 'reward_list' %}">
+                    <i class="fas fa-gift me-2"></i> Rewards
+                </a>
+                <a class="nav-link mb-2" href="{% url 'achievements' %}">
+                    <i class="fas fa-medal me-2"></i> Achievements
+                </a>
+                <a class="nav-link mb-2" href="{% url 'health_metrics' %}">
+                    <i class="fas fa-heartbeat me-2"></i> Health Metrics
+                </a>
+                <a class="nav-link mb-2" href="{% url 'leaderboard' %}">
+                    <i class="fas fa-users me-2"></i> Leaderboard
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">My Challenges</h2>
+                <a href="{% url 'challenge_list' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> Join New Challenge
+                </a>
+            </div>
+            
+            <!-- Active Challenges -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Active Challenges</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_participations %}
+                        <div class="row">
+                            {% for participation in active_participations %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="challenge-card h-100">
+                                        <div class="challenge-header bg-warning-subtle d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 text-warning">{{ participation.challenge.title }}</h6>
+                                            <span class="badge bg-warning">{{ participation.current_progress }}/{{ participation.challenge.target_count }}</span>
+                                        </div>
+                                        <div class="challenge-body">
+                                            <p class="small text-muted mb-2">{{ participation.challenge.description|truncatechars:120 }}</p>
+                                            <div class="progress mb-3" style="height: 8px;">
+                                                <div class="progress-bar bg-warning" 
+                                                     role="progressbar" 
+                                                     style="width: {% widthratio participation.current_progress participation.challenge.target_count 100 %}%;" 
+                                                     aria-valuenow="{{ participation.current_progress }}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="{{ participation.challenge.target_count }}">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="challenge-meta">
+                                                    <p class="small mb-0">
+                                                        <i class="fas fa-calendar-alt me-1 text-muted"></i> 
+                                                        Ends {{ participation.challenge.end_date|date:"M d, Y" }}
+                                                    </p>
+                                                    <p class="small mb-0">
+                                                        <i class="fas fa-award me-1 text-muted"></i> 
+                                                        Reward: {{ participation.challenge.points_reward }} points
+                                                    </p>
+                                                </div>
+                                                <a href="{% url 'challenge_detail' participation.challenge.id %}" class="btn btn-sm btn-outline-warning">
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-trophy fa-3x text-muted"></i>
+                            </div>
+                            <h5>No Active Challenges</h5>
+                            <p class="text-muted mb-4">You're not participating in any challenges right now.</p>
+                            <a href="{% url 'challenge_list' %}" class="btn btn-primary">
+                                Browse Available Challenges
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Completed Challenges -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Completed Challenges</h5>
+                </div>
+                <div class="card-body">
+                    {% if completed_participations %}
+                        <div class="row">
+                            {% for participation in completed_participations %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="challenge-card h-100">
+                                        <div class="challenge-header bg-success-subtle d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 text-success">{{ participation.challenge.title }}</h6>
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle me-1"></i> Completed
+                                            </span>
+                                        </div>
+                                        <div class="challenge-body">
+                                            <p class="small text-muted mb-2">{{ participation.challenge.description|truncatechars:120 }}</p>
+                                            <div class="progress mb-3" style="height: 8px;">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="challenge-meta">
+                                                    <p class="small mb-0">
+                                                        <i class="fas fa-calendar-check me-1 text-muted"></i> 
+                                                        Completed on {{ participation.completed_at|date:"M d, Y" }}
+                                                    </p>
+                                                    <p class="small mb-0">
+                                                        <i class="fas fa-award me-1 text-muted"></i> 
+                                                        Reward: {{ participation.challenge.points_reward }} points
+                                                    </p>
+                                                </div>
+                                                <a href="{% url 'challenge_detail' participation.challenge.id %}" class="btn btn-sm btn-outline-success">
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-medal fa-3x text-muted"></i>
+                            </div>
+                            <h5>No Completed Challenges</h5>
+                            <p class="text-muted">Complete challenges to earn points and rewards!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .challenge-card {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .challenge-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+    
+    .challenge-header {
+        padding: 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .challenge-body {
+        padding: 15px;
+    }
+    
+    .challenge-meta {
+        color: #6c757d;
+    }
+</style>
+{% endblock %} 

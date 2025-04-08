@@ -1,0 +1,154 @@
+{% extends "healthxpfront/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} - HealthXP{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'healthxpfront/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            {% with active_tab='activities' %}
+                {% include 'healthxpfront/includes/sidebar.html' %}
+            {% endwith %}
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="form-section">
+                    <div class="section-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ title }}</h3>
+                        <a href="{% url 'activity_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Activities
+                        </a>
+                    </div>
+                    
+                    <div class="section-body">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form method="POST" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="{{ form.activity_type.id_for_label }}" class="form-label">Activity Type</label>
+                                    {{ form.activity_type }}
+                                    {% if form.activity_type.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.activity_type.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+                                    {{ form.date }}
+                                    {% if form.date.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.date.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <label for="{{ form.duration.id_for_label }}" class="form-label">Duration (minutes)</label>
+                                    {{ form.duration }}
+                                    {% if form.duration.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.duration.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <label for="{{ form.distance.id_for_label }}" class="form-label">Distance (km)</label>
+                                    {{ form.distance }}
+                                    {% if form.distance.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.distance.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label for="{{ form.calories.id_for_label }}" class="form-label">Calories Burned</label>
+                                    {{ form.calories }}
+                                    {% if form.calories.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.calories.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.notes.id_for_label }}" class="form-label">Notes</label>
+                                {{ form.notes }}
+                                {% if form.notes.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.notes.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="alert alert-info mb-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <span>You'll earn points based on the activity type. Additional bonus points for longer duration or distance!</span>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{% url 'activity_list' %}" class="btn btn-outline-secondary me-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="fas fa-save me-2"></i> Save Activity
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const form = document.querySelector('.needs-validation');
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %} 

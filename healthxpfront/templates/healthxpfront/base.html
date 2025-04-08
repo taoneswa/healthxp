@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HealthXP - International Pharmacotherapy Education and Research Initiative{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'healthxpfront/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'healthxpfront/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* User dropdown menu styles */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            width: 200px;
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            padding: 5px 0;
+            border-top: 2px solid var(--primary-color);
+        }
+        
+        .user-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            display: block;
+            padding: 12px 15px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+            color: var(--primary-color);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 5px 0;
+        }
+        
+        /* Cart icon styles */
+        .cart-icon {
+            position: relative;
+            margin-right: 20px;
+        }
+        
+        .cart-icon a {
+            color: var(--secondary-color);
+            font-size: 18px;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        /* Main Navigation styles */
+        .main-nav {
+            position: relative;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+        }
+        
+        .nav-menu > li {
+            position: relative;
+        }
+        
+        .nav-menu > li > a {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-menu > li > a:hover,
+        .nav-menu > li:hover > a {
+            color: var(--primary-color);
+            background-color: rgba(100, 30, 54, 0.03);
+        }
+        
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        
+        .nav-menu > li:hover > a::after {
+            width: 100%;
+            left: 0;
+        }
+        
+        .dropdown-toggle::after {
+            content: "\f107"; /* FontAwesome down arrow */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-left: 8px;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+        
+        .nav-submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 220px;
+            background-color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            padding: 8px 0;
+            list-style: none;
+            border-radius: 0 0 4px 4px;
+            border-top: 3px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .nav-menu > li:hover .nav-submenu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-menu > li:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+        
+        .nav-submenu li {
+            position: relative;
+        }
+        
+        .nav-submenu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 13px;
+            transition: color 0.3s ease, background-color 0.3s ease, padding-left 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-submenu a:hover {
+            background-color: rgba(100, 30, 54, 0.03);
+            color: var(--primary-color);
+            padding-left: 25px;
+        }
+        
+        .nav-submenu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 0;
+            background-color: var(--primary-color);
+            transition: height 0.3s ease;
+        }
+        
+        .nav-submenu a:hover::before {
+            height: 100%;
+        }
+        
+        /* Active state for current page */
+        .nav-menu > li.active > a,
+        .nav-submenu > li.active > a {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .nav-menu > li.active > a::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #ffffff;
+            color: #666;
+            padding: 60px 0 120px; /* Increased bottom padding to account for bottom nav */
+            border-top: 1px solid #eee;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .footer-logo img {
+            max-width: 180px;
+            height: auto;
+            filter: none; /* Remove the invert filter */
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-column ul li a i {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        /* Bottom Navigation Bar Styles */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            color: #666;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid #eee;
+        }
+
+        .bottom-nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .bottom-nav-contact {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .bottom-nav-contact p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bottom-nav-contact i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .bottom-nav-copyright {
+            text-align: right;
+            color: #666;
+            font-size: 0.85rem;
+            padding-left: 20px;
+            border-left: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer-logo {
+                justify-content: center;
+            }
+
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-column {
+                text-align: center;
+            }
+
+            .footer-column ul li a {
+                justify-content: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            .bottom-nav {
+                padding: 15px 0;
+            }
+
+            .bottom-nav-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .bottom-nav-contact {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .bottom-nav-contact p {
+                justify-content: center;
+            }
+
+            .bottom-nav-copyright {
+                text-align: center;
+                width: 100%;
+                border-left: none;
+                padding-left: 0;
+                padding-top: 10px;
+                border-top: 1px solid #eee;
+            }
+
+            /* Add padding to main content to prevent overlap */
+            .main-content {
+                padding-bottom: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'healthxpfront/images/logo.png' %}" alt="iPerl Logo">
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="cart-icon">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'cart_view' %}" title="View Shopping Cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% if cart_item_count > 0 %}
+                                <span class="cart-count">{{ cart_item_count }}</span>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" title="Login to view cart">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    {% if user.is_authenticated %}
+                        <div class="user-dropdown">
+                            <a class="dropdown-item" href="{% url 'profile' %}">
+                                <i class="fas fa-user-circle me-2"></i>Profile
+                            </a>
+                            <a class="dropdown-item" href="{% url 'dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                            <a class="dropdown-item" href="{% url 'my_subscription' %}">
+                                <i class="fas fa-crown me-2"></i>My Subscription
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="user-dropdown">
+                            <a class="dropdown-item" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                            <a class="dropdown-item" href="{% url 'register' %}">
+                                <i class="fas fa-user-plus me-2"></i>Register
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                <a href="{% url 'contact' %}" class="contact-btn">Contact Us</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li {% if request.path == '/' %}class="active"{% endif %}><a href="{% url 'home' %}">HOME</a></li>
+                <li {% if request.path|slice:":7" == '/about/' %}class="active"{% endif %}>
+                    <a href="{% url 'about' %}" class="dropdown-toggle">ABOUT US</a>
+                    <ul class="nav-submenu">
+                        <li {% if request.path == '/about/' %}class="active"{% endif %}><a href="{% url 'about' %}">ABOUT US</a></li>
+                        <li><a href="#">OUR TEAM</a></li>
+                        <li {% if request.path == '/contact/' %}class="active"{% endif %}><a href="{% url 'contact' %}">CONTACT US</a></li>
+                    </ul>
+                </li>
+                <li {% if request.path|slice:":19" == '/health-galaxy-park/' %}class="active"{% endif %}>
+                    <a href="{% url 'health_galaxy_park' %}" class="dropdown-toggle">HEALTH GALAXY PARK</a>
+                    <ul class="nav-submenu">
+                        <li {% if request.path == '/health-galaxy-park/' %}class="active"{% endif %}><a href="{% url 'health_galaxy_park' %}">ABOUT HGP</a></li>
+                    </ul>
+                </li>
+                <li {% if request.path|slice:":5" == '/ptn/' %}class="active"{% endif %}>
+                    <a href="{% url 'ptn' %}" class="dropdown-toggle">PTN</a>
+                    <ul class="nav-submenu">
+                        <li {% if request.path == '/ptn/' %}class="active"{% endif %}><a href="{% url 'ptn' %}">Pain Therapy Network</a></li>
+                        <li><a href="#">Materials</a></li>
+                    </ul>
+                </li>
+                <li {% if request.path == '/subscriptions/' %}class="active"{% endif %}><a href="{% url 'subscriptions' %}">SUBSCRIPTIONS</a></li>
+                <li {% if request.path == '/events/' %}class="active"{% endif %}><a href="{% url 'events' %}">EVENTS</a></li>
+                <li {% if request.path|slice:":10" == '/research/' %}class="active"{% endif %}>
+                    <a href="{% url 'research' %}" class="dropdown-toggle">RESEARCH</a>
+                    <ul class="nav-submenu">
+                        <li {% if request.path == '/research/' %}class="active"{% endif %}><a href="{% url 'research' %}">Scholars</a></li>
+                        <li><a href="#">PARI Support Group</a></li>
+                    </ul>
+                </li>
+                <li {% if request.path == '/appointment/' %}class="active"{% endif %}><a href="{% url 'appointment' %}">APPOINTMENT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{% static 'healthxpfront/images/logo.png' %}" alt="iPerl Logo">
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="{% url 'about' %}"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="{% url 'health_galaxy_park' %}"><i class="fas fa-chevron-right"></i> Health Galaxy Park</a></li>
+                            <li><a href="{% url 'contact' %}"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="{% url 'ptn' %}"><i class="fas fa-chevron-right"></i> PTN</a></li>
+                            <li><a href="{% url 'subscriptions' %}"><i class="fas fa-chevron-right"></i> Subscriptions</a></li>
+                            <li><a href="{% url 'events' %}"><i class="fas fa-chevron-right"></i> Events</a></li>
+                            <li><a href="{% url 'research' %}"><i class="fas fa-chevron-right"></i> Research</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Connect With Us</h3>
+                        <div class="social-icons">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="container">
+            <div class="bottom-nav-content">
+                <div class="bottom-nav-contact">
+                    <p><i class="fas fa-map-marker-alt"></i> No. 3 Northolt Drive Bluffhill • Harare • Zimbabwe</p>
+                    <p><i class="fas fa-phone"></i> +263-772666478/772236634</p>
+                    <p><i class="fas fa-envelope"></i> iperizim@hgp-iperi.org</p>
+                </div>
+                <div class="bottom-nav-copyright">
+                    <p>Copyright © International Pharmacotherapy Education and Research Initiative</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block scripts %}{% endblock %}
+    <script src="{% static 'healthxpfront/js/main.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenuBtn = document.querySelector('.user-menu-btn');
+            const userDropdown = document.querySelector('.user-dropdown');
+            
+            if (userMenuBtn && userDropdown) {
+                userMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Hidden logout form with proper CSRF token -->
+    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+    </form>
+</body>
+</html> 
